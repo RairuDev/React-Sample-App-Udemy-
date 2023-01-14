@@ -1,56 +1,49 @@
-import { useState } from 'react';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import { ColorfulMessage } from './components/ColorfulMessage';
 
-export const App = () => {
-  const [incompleteTodos, setIncompleteTodos] = useState(["宿題", "洗濯"]);
-  const [completeTodos, setCompleteTodos] = useState(["掃除"]);
-  const [todoText, setTodoText] = useState('');
+const App = () => {
+  const [num, setNum] = useState(0);
+  const [faceShowFlag, setFacaShowFlag] = useState(false);
+  console.log("faceShowFlag" + faceShowFlag)//false
 
-  const onchangeTodoText = (event) => {
-    setTodoText(event.target.value);
-  };
+  const onClickCountUp = () => {
+    setNum(num + 1)
+  }
+
+  // ON/OFFのボタンを押したら
+  const onClickSwitchShowFlag = () => {
+    setFacaShowFlag(!faceShowFlag);
+  }
+
+  console.log("numの値を確認" + num)
+  // からの配列を設定することで画面を表示する1回のみ処理が通るようになる
+  useEffect(() => {
+    console.log("useEffect!!");
+    if (num > 0) {
+      if (num % 3 === 0) {
+        faceShowFlag || setFacaShowFlag(true)
+      } else {
+        faceShowFlag && setFacaShowFlag(false)
+      }
+    }
+  }, [num])
+
 
   return (
     <>
-      <div className="outline">
-        <div className="imcompleteArea">
-          <p className="title">未完了のtodo</p>
-          <ul>
-            {incompleteTodos.map((todo) => {
-              return (
-                <li key={todo} className="todoList">
-                  <p>{todo}</p>
-                  <button>完了</button>
-                  <button>削除</button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+      <h1 style={{ color: 'red' }}>こんにちは！</h1>
+      <ColorfulMessage color="blue" fontWeight="bold">お元気ですか？?</ColorfulMessage>
+      <ColorfulMessage color="pink" fontWeight="bold">元気です</ColorfulMessage>
+      <button onClick={onClickCountUp}>カウントアップ</button>
+      <br />
 
-        <div className="completeArea">
-          <p className="title2">完了のtodo</p>
-          <ul>
-            {completeTodos.map((todo) => {
-              return (
-                <li key={todo} className="todoList">
-                  <p>{todo}</p>
-                  <button>戻す</button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+      <button onClick={onClickSwitchShowFlag}>on/off</button>
 
-      <div className='inputArea'>
-        <input placeholder='todoを入力' value={todoText} onChange={onchangeTodoText} />
-        <button>追加</button>
+      <p>{num}</p>
+      {faceShowFlag && <p>( ^ω^ )</p>}
 
-      </div>
     </>
   );
 };
-
 
 export default App;
